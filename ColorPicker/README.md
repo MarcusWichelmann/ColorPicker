@@ -9,3 +9,5 @@ Handy WPF based color picker for windows desktop.
 - Real-time color preview and magnifier for more accurate selection
 - ALT + Left click to remember the color and copy&paste it's values
 - Use the arrow keys to adjust the selection afterwards 
+
+[**Download (No installation required)**](https://github.com/MarcusWichelmann/ColorPicker/releases/download/1.1/ColorPicker.zip)
