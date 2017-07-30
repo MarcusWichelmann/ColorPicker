@@ -1,0 +1,244 @@
+﻿<Window x:Class="ColorPicker.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ColorPicker"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance local:MainWindow}"
+        Title="ColorPicker"
+        Height="300"
+        Width="500"
+        MinHeight="250"
+        MinWidth="400"
+        WindowStartupLocation="Manual"
+        Left="0"
+        Top="0"
+        Topmost="True"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        ResizeMode="CanResizeWithGrip"
+        SnapsToDevicePixels="True"
+        Background="#1C1C1C"
+        MouseDown="MainWindow_OnMouseDown"
+        MouseEnter="MainWindow_OnMouseEnter"
+        MouseLeave="MainWindow_OnMouseLeave"
+        PreviewKeyDown="MainWindow_OnPreviewKeyDown"
+        StateChanged="MainWindow_OnStateChanged"
+        Closing="MainWindow_OnClosing"
+        Icon="ColorPicker.ico">
+
+    <Window.Resources>
+        <Style x:Key="FlatButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Padding" Value="1" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <Grid Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" />
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#44000000" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#77000000" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <SolidColorBrush x:Key="SelectedColorBrush" Color="{Binding SelectedColor}" />
+        <SolidColorBrush x:Key="ForegroundColorBrush" Color="{Binding ForegroundColor}" />
+    </Window.Resources>
+
+    <Grid Background="{StaticResource SelectedColorBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Width="{Binding MaxHeight, RelativeSource={RelativeSource Self}}" Background="{StaticResource SelectedColorBrush}" Margin="10,10,10,30">
+            <Border.OpacityMask>
+                <VisualBrush>
+                    <VisualBrush.Visual>
+                        <Border Background="Black" CornerRadius="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType=Border}}"
+                                Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType=Border}}"
+                                Height="{Binding ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType=Border}}" />
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Border.OpacityMask>
+
+            <Grid>
+                <Image Source="{Binding PreviewBitmap}" RenderOptions.BitmapScalingMode="NearestNeighbor" Stretch="UniformToFill" HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
+
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="7*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="7*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="7*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Row="0" Grid.Column="0" BorderThickness="0,0,1,1" BorderBrush="{StaticResource ForegroundColorBrush}" />
+                    <Border Grid.Row="0" Grid.Column="1" BorderThickness="0,0,0,5" BorderBrush="{StaticResource SelectedColorBrush}" />
+                    <Border Grid.Row="0" Grid.Column="2" BorderThickness="1,0,0,1" BorderBrush="{StaticResource ForegroundColorBrush}" />
+
+                    <Border Grid.Row="1" Grid.Column="0" BorderThickness="0,0,5,0" BorderBrush="{StaticResource SelectedColorBrush}" />
+                    <Border Grid.Row="1" Grid.Column="2" BorderThickness="5,0,0,0" BorderBrush="{StaticResource SelectedColorBrush}" />
+
+                    <Border Grid.Row="2" Grid.Column="0" BorderThickness="0,1,1,0" BorderBrush="{StaticResource ForegroundColorBrush}" />
+                    <Border Grid.Row="2" Grid.Column="1" BorderThickness="0,5,0,0" BorderBrush="{StaticResource SelectedColorBrush}" />
+                    <Border Grid.Row="2" Grid.Column="2" BorderThickness="1,1,0,0" BorderBrush="{StaticResource ForegroundColorBrush}" />
+                </Grid>
+            </Grid>
+        </Border>
+
+        <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding CurrentPosition.X, StringFormat='X: \{0\}'}"
+                   Foreground="{StaticResource ForegroundColorBrush}" Margin="10" />
+        <TextBlock Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Top" Text="{Binding CurrentPosition.Y, StringFormat='Y: \{0\}'}"
+                   Foreground="{StaticResource ForegroundColorBrush}" Margin="10" />
+
+        <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="{StaticResource ForegroundColorBrush}" Margin="10">
+            ColorPicker by
+            <Hyperlink NavigateUri="https://marcusw.de" RequestNavigate="Hyperlink_OnRequestNavigate" Foreground="{StaticResource ForegroundColorBrush}">Marcus Wichelmann</Hyperlink>
+        </TextBlock>
+
+        <Grid Grid.Column="1">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding SelectedColorHex}" IsReadOnly="True" Background="Transparent"
+                         Foreground="{StaticResource ForegroundColorBrush}" BorderThickness="0" FontSize="24" FontWeight="Bold" Margin="0,0,0,2" />
+
+                <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding SelectedColorRgb}" IsReadOnly="True" Background="Transparent"
+                         Foreground="{StaticResource ForegroundColorBrush}" BorderThickness="0" FontWeight="Bold" Margin="0,0,0,15" />
+
+                <TextBlock Grid.Row="2" Grid.Column="1" Text="R:" Foreground="{StaticResource ForegroundColorBrush}" Margin="0,0,0,5" />
+                <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding SelectedColor.R}" IsReadOnly="True" Background="Transparent"
+                         Foreground="{StaticResource ForegroundColorBrush}" BorderThickness="0" />
+
+                <TextBlock Grid.Row="3" Grid.Column="1" Text="G:" Foreground="{StaticResource ForegroundColorBrush}" Margin="0,0,0,5" />
+                <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding SelectedColor.G}" IsReadOnly="True" Background="Transparent"
+                         Foreground="{StaticResource ForegroundColorBrush}" BorderThickness="0" />
+
+                <TextBlock Grid.Row="4" Grid.Column="1" Text="B:" Foreground="{StaticResource ForegroundColorBrush}" Margin="0,0,0,5" />
+                <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding SelectedColor.B}" IsReadOnly="True" Background="Transparent"
+                         Foreground="{StaticResource ForegroundColorBrush}" BorderThickness="0" />
+
+                <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Text="Use the arrow keys to adjust your selection (Window has to be focused)" TextWrapping="Wrap"
+                           TextAlignment="Center" Foreground="{StaticResource ForegroundColorBrush}" Margin="0,0,0,5">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Setters>
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </Style.Setters>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ColorSelectionActive}" Value="False">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                <Button x:Name="StartSelectionButton" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Content="Retart color selection"
+                        Foreground="{StaticResource ForegroundColorBrush}" BorderBrush="{StaticResource ForegroundColorBrush}" BorderThickness="1" Padding="7,5"
+                        Click="StartSelectionButton_OnClick">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource FlatButtonStyle}">
+                            <Style.Setters>
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </Style.Setters>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ColorSelectionActive}" Value="False">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Text="Hold left Alt-Key down and click left to select a color" TextWrapping="Wrap"
+                           TextAlignment="Center" Foreground="{StaticResource ForegroundColorBrush}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Setters>
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </Style.Setters>
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding ColorSelectionActive}" Value="True" />
+                                        <Condition Binding="{Binding SelectionKeyDown}" Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Text="Now click left on the pixel to be selected" TextWrapping="Wrap"
+                           TextAlignment="Center" Foreground="{StaticResource ForegroundColorBrush}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Setters>
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </Style.Setters>
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding ColorSelectionActive}" Value="True" />
+                                        <Condition Binding="{Binding SelectionKeyDown}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
+
+            <Button Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" ToolTip="Close" Foreground="{StaticResource ForegroundColorBrush}"
+                    Command="{Binding Source={x:Static SystemCommands.CloseWindowCommand}}" Style="{StaticResource FlatButtonStyle}" HorizontalAlignment="Right"
+                    VerticalAlignment="Top" Padding="5">
+                <Button.Content>
+                    <fa:FontAwesome Icon="Close" />
+                </Button.Content>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>
