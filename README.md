@@ -11,3 +11,7 @@ Handy WPF based color picker for windows desktop.
 - Use the arrow keys to adjust the selection afterwards 
 
 [**Download (No installation required)**](https://github.com/MarcusWichelmann/ColorPicker/releases/download/1.1/ColorPicker.zip)
+
+### Open source libraries
+- [FontAweseome.WPF](https://github.com/charri/Font-Awesome-WPF/blob/master/LICENSE)
+- [GlobalMouseKeyHook](https://github.com/gmamaladze/globalmousekeyhook/blob/master/LICENSE.txt)
