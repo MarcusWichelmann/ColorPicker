@@ -117,7 +117,8 @@
                    Foreground="{StaticResource ForegroundColorBrush}" Margin="10" />
 
         <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="{StaticResource ForegroundColorBrush}" Margin="10">
-            ColorPicker by
+            <Hyperlink NavigateUri="https://github.com/MarcusWichelmann/ColorPicker" RequestNavigate="Hyperlink_OnRequestNavigate" Foreground="{StaticResource ForegroundColorBrush}">ColorPicker</Hyperlink>
+            by
             <Hyperlink NavigateUri="https://marcusw.de" RequestNavigate="Hyperlink_OnRequestNavigate" Foreground="{StaticResource ForegroundColorBrush}">Marcus Wichelmann</Hyperlink>
         </TextBlock>
 
