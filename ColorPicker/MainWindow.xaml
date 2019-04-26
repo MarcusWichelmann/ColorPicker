@@ -175,7 +175,7 @@
                     </TextBlock.Style>
                 </TextBlock>
 
-                <Button x:Name="StartSelectionButton" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Content="Retart color selection"
+                <Button x:Name="StartSelectionButton" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Content="Restart color selection"
                         Foreground="{StaticResource ForegroundColorBrush}" BorderBrush="{StaticResource ForegroundColorBrush}" BorderThickness="1" Padding="7,5"
                         Click="StartSelectionButton_OnClick">
                     <Button.Style>
